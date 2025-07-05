@@ -1,0 +1,56 @@
+ORG   0x148
+STR:    WORD 0x0595
+POINTER: WORD ?
+
+START: CLA
+LD  STR
+ST  POINTER
+
+    
+S1: 
+    IN  0x19
+    AND #0x40
+    BEQ S1
+    IN  0x18   
+    ST (POINTER)
+    CMP #0x0A
+    BEQ PHLT
+
+S1P:
+    IN 0x0D
+    AND #0x40
+    BEQ S1P
+    LD (POINTER)
+    OUT 0xC
+
+
+S2:
+    IN  0x19
+    AND #0x40
+    BEQ S2
+    LD (POINTER)
+    SWAB
+    IN  0x18
+    SWAB
+    ST  (POINTER)
+
+SWAB 
+SXTB
+CMP #0x0A
+BEQ PHLT
+
+S2P:
+    IN 0x0D
+    AND #0x40
+    BEQ S2P
+    LD (POINTER)+
+    SWAB
+    OUT 0xC
+
+
+JUMP S1
+
+PHLT: HLT
+
+ORG 0x0595
+WORD ?
